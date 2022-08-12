@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ethan/Workset/AStar/src/AStar.cpp
+iostream
+-
+cmath
+-
+Map.h
+/home/ethan/Workset/AStar/src/Map.h
+AStar.h
+/home/ethan/Workset/AStar/src/AStar.h
+
+/home/ethan/Workset/AStar/src/AStar.h
+list
+-
+
+/home/ethan/Workset/AStar/src/Map.cpp
+iostream
+-
+Map.h
+/home/ethan/Workset/AStar/src/Map.h
+AStar.h
+/home/ethan/Workset/AStar/src/AStar.h
+
+/home/ethan/Workset/AStar/src/Map.h
+iostream
+-
+string
+-
+AStar.h
+/home/ethan/Workset/AStar/src/AStar.h
+
+/home/ethan/Workset/AStar/src/main.cpp
+iostream
+-
+Map.h
+/home/ethan/Workset/AStar/src/Map.h
+AStar.h
+/home/ethan/Workset/AStar/src/AStar.h
+
