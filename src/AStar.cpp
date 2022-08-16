@@ -42,74 +42,112 @@ void ASTAR::CAStar::AstarCoreFunction(ASTAR::Node **temp_map, int start_x, int s
         float temp_Sfn_ = 0.0;
     };
 
-    InsertClose(temp_map[Node_x][Node_y]);
-
     while (CLOSE != temp_map[target_x][target_y].state)
     {
-        InsertClose(temp_map[Node_x][Node_y]);
+        temp_map[Node_x][Node_y].state = CLOSE;
 
         temp_Sfn temp_Sfn_data;
-        
+
+        int temp_index_x;
+        int temp_index_y;
+
         for (int i = (Node_x - 1); i < (Node_x + 2); i++)
         {
             for (int j = (Node_y - 1); j < (Node_y + 2); j++)
             {
-                if((CLOSE != temp_map[i][j].state) && (INFEASIBLE != temp_map[i][j].state))
+                if (NEW == temp_map[i][j].state)
+                {   
+                    temp_map[i][j].SparentX = Node_x;
+                    temp_map[i][j].SparentY = Node_y;
+                    temp_map[i][j].Shn = ManhattanDistance(i, j, target_x, target_y);
+                    temp_map[i][j].Sgn = temp_map[Node_x][Node_y].Sgn + EuclideanDistance(i, j, Node_x, Node_y);
+                    temp_map[i][j].Sfn = temp_map[i][j].Sgn + temp_map[i][j].Shn;
+
+                    temp_map[i][j].state = OPEN;
+                }
+                else if (OPEN == temp_map[i][j].state)
                 {
-                    //cout << temp_Sfn << endl;
-                    // if(NEW == temp_map[i][j].state)
-                    // {
+                    float ParentToCurrent = EuclideanDistance(i, j, Node_x, Node_y);
+
+                    if ((ParentToCurrent + temp_map[Node_x][Node_y].Sgn) >= temp_map[i][j].Sgn)
+                    {
+                        
+                    }
+                    else
+                    {
                         temp_map[i][j].SparentX = Node_x;
                         temp_map[i][j].SparentY = Node_y;
-                        temp_map[i][j].Sgn = temp_map[Node_x][Node_y].Sgn + EuclideanDistance(i, j, Node_x, Node_y);
+                        temp_map[i][j].Sgn = (ParentToCurrent + temp_map[Node_x][Node_y].Sgn);
                         temp_map[i][j].Shn = ManhattanDistance(i, j, target_x, target_y);
                         temp_map[i][j].Sfn = temp_map[i][j].Sgn + temp_map[i][j].Shn;
-                        InsertOpen(temp_map[i][j]);
-                    // }
-                    // else if(OPEN == temp_map[i][j].state)
-                    // {
-                    //     temp_map[i][j].Sgn = EuclideanDistance(i, j, temp_map[Node_x][Node_y].SparentX, temp_map[Node_x][Node_y].SparentY);
-                    //     float ParentToCurrentSgn = EuclideanDistance(i, j, Node_x, Node_y);
-
-                    //     if ((ParentToCurrentSgn + temp_map[Node_x][Node_y].Sgn) > temp_map[i][j].Sgn)
-                    //     {
-                    //         temp_map[i][j].SparentX = temp_map[Node_x][Node_y].SparentX;
-                    //         temp_map[i][j].SparentY = temp_map[Node_x][Node_y].SparentY;
-                    //     }
-                    //     else
-                    //     {
-                    //         temp_map[i][j].Sgn = (ParentToCurrentSgn + temp_map[Node_x][Node_y].Sgn);
-                    //     }
-
-                    //     temp_map[i][j].Shn = ManhattanDistance(i, j, target_x, target_y);
-                    //     temp_map[i][j].Sfn = temp_map[i][j].Sgn + temp_map[i][j].Shn;
-                    // }
-
-                    if (true == temp_Sfn_data.FirstTime)
-                    {
-                        temp_Sfn_data.temp_Sfn_= temp_map[i][j].Sfn;
-                        Node_x = i;
-                        Node_y = j;
-                        temp_Sfn_data.FirstTime = false;
                     }
-                    else if (temp_map[i][j].Sfn < (temp_Sfn_data.temp_Sfn_))
-                    {
-                        Node_x = i;
-                        Node_y = j;
-                        temp_Sfn_data.temp_Sfn_ = temp_map[i][j].Sfn;
-                    }
+                }
+                else
+                {
+                    continue;
+                }
+                
+                if(true == temp_Sfn_data.FirstTime)
+                {
+                    temp_Sfn_data.temp_Sfn_ = temp_map[i][j].Sfn;
+                    temp_index_x = i;
+                    temp_index_y = j;
+                    temp_Sfn_data.FirstTime = false;
+                }
+                else if(temp_map[i][j].Sfn < temp_Sfn_data.temp_Sfn_)
+                {
+                    temp_Sfn_data.temp_Sfn_ = temp_map[i][j].Sfn;
+                    temp_index_x = i;
+                    temp_index_y = j;
                 }
             }
         }
- 
-        if((Node_x == target_x)&&(Node_y == target_y))
+
+        Node_x = temp_index_x;
+        Node_y = temp_index_y;
+
+        cout << Node_x << ", " << Node_y << endl;
+        
+        if ((target_x == Node_x) && (target_y == Node_y))
         {
             break;
         }
+    }
+    
+    int temp_Node_x = target_x;
+    int temp_Node_y = target_y;
+
+    while (!((temp_Node_x == start_x) && (temp_Node_y == start_y)))
+    {
+        
+        int x;
+        int y;
+
+        //temp_map[temp_Node_x][temp_Node_y].display_state = '*';
+
+        cout << temp_Node_x << "," << temp_Node_y << " -> ";
+        cout << temp_map[temp_Node_x][temp_Node_y].SparentX << "," << temp_map[temp_Node_x][temp_Node_y].SparentY << endl;
+
+        x = temp_map[temp_Node_x][temp_Node_y].SparentX;
+        y = temp_map[temp_Node_x][temp_Node_y].SparentY;
+
+        temp_Node_x = x;
+        temp_Node_y = y;
+
+        if((temp_Node_x == start_x) && (temp_Node_y == start_y))
+        {
+            break;
+        }
+
+        temp_map[temp_Node_x][temp_Node_y].display_state = '*';
+
+        if((temp_Node_x == 28) && (temp_Node_y == 15))
+        {
+            cout << temp_Node_x << "," << temp_Node_y << "----------------" << endl;
+        }
         else
         {
-            temp_map[Node_x][Node_y].display_state = '*'; 
+            cout << temp_Node_x << "," << temp_Node_y << "!!!" << endl;
         }
     }
-    //cout << temp_Sfn_data.temp_Sfn_ << endl;
 }

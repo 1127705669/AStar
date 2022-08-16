@@ -56,7 +56,7 @@ void Map::Map::SetWall(int WallStartPoint_x, int WallStartPoint_y, int WallEndPo
 
     for (int i = WallStartPoint_x; i < WallEndPoint_y; i++)
     {
-        map_[i][15].display_state = '#';
-        map_[i][15].state = INFEASIBLE;
+        map_[i][WallStartPoint_y].display_state = '#';
+        map_[i][WallStartPoint_y].state = INFEASIBLE;
     }
 }

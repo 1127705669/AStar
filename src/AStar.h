@@ -17,7 +17,7 @@ namespace ASTAR{
 		float Sgn;            
 		float Shn;             
 		float Sfn;
-        State state;
+        State state = NEW;
         char display_state;
 	};
 
